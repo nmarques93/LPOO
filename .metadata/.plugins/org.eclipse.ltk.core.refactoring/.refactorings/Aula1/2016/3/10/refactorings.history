@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move element &apos;Maze.java&apos; to &apos;Aula1/src/maze.cli&apos;&#x0A;- Original project: &apos;Aula1&apos;&#x0A;- Destination element: &apos;Aula1/src/maze.cli&apos;&#x0A;- Original element: &apos;Maze.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;maze.cli" element1="/src&lt;{Maze.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1457714319009" units="1" version="1.0"/>
-</session>

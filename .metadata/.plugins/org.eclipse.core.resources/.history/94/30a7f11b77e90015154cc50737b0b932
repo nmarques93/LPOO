@@ -1,9 +1,0 @@
-package numerics;
-
-public abstract class ProbabilityDistribution{
-	
-	abstract double getMean(){
-		return mean;
-	}
-
-}
