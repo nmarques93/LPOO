@@ -1,0 +1,5 @@
+package numerics;
+
+public class ProbabilityDistribution extends NormalDistribution{
+
+}

@@ -1,0 +1,69 @@
+package maze.logic;
+
+import java.awt.Point;
+
+public class Hero extends Element{
+	protected boolean hasSword;
+	protected boolean hasWon;
+	protected boolean hasDied;
+	
+	public Hero(){
+		symbol='H';
+		posx=1;
+		posy=1;
+	}
+	
+	
+	public void setDead(boolean b){
+		hasDied=b;
+	}
+	
+	public boolean getDead(){
+		return hasDied;
+	}
+	
+	public void setWon(boolean b){
+		hasWon=b;
+	}
+	
+	public boolean getWon(){
+		return hasWon;
+	}
+	
+	//verifica se o proximo move é permitido
+	public boolean validMove(Maze maz, int x, int y){
+		
+		if(!super.validMove(maz, x, y)) System.out.println("Invalid move!!");
+		
+		return super.validMove(maz, x, y);
+	}
+	
+	public void move(Maze maz, Sword excalibur, Dragon smaug, char direction){
+		if(direction =='d' && validMove(maz, coord.getX()+1, coord.getY())){
+			maz.setSymbol(posx, posy, ' ');
+			posx += 1;
+		}
+		if(direction =='u' && validMove(maz, posx-1, posy)){
+			maz.setSymbol(posx, posy, ' ');
+			posx -= 1;
+		}
+		if(direction =='r' && validMove(maz, posx, posy+1)){
+			maz.setSymbol(posx, posy, ' ');
+			posy += 1;
+		}
+		if(direction =='l' && validMove(maz, posx, posy-1)){
+			maz.setSymbol(posx, posy, ' ');
+			posy -= 1;
+		}
+		
+		if(maz.getSymbol(posx, posy)=='S'){
+			maz.setEnded(true);
+		}
+		
+		if(posx==excalibur.getX() && posy==excalibur.getY()){
+			this.symbol='A';
+			excalibur.setSymbol(' ');
+		}
+	}
+	
+}

@@ -1,0 +1,10 @@
+package numerics;
+
+public class NormalDistribution {
+	float mean, stdev;
+	
+	public NormalDistribution(float mean, float stdev){
+		this.mean=mean;
+		this.stdev=stdev;
+	}
+}
