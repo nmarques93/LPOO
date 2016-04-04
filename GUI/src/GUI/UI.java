@@ -5,6 +5,13 @@
  */
 package GUI;
 
+import maze.logic.Dragon;
+import maze.logic.Element;
+import maze.logic.Hero;
+import maze.logic.Maze;
+import maze.logic.Sword;
+import maze.logic.MazeBuilder;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,6 +20,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import maze.cli.MazeApp;
 
 /**
  *
@@ -29,11 +37,25 @@ public class UI extends javax.swing.JFrame implements ActionListener, KeyListene
         initComponents();
     }
     
-    /*lab = new Maze( int dimensao, int numDragoes, enum tipoDragoes) {
-    
+    public void displayMaze(){
+        MazeApp.lo[MazeApp.luke.getX()][MazeApp.luke.getY()]='H';
+        MazeApp.lo[MazeApp.smaug.getX()][MazeApp.smaug.getY()]='D';
+        MazeApp.lo[MazeApp.excalibur.getX()][MazeApp.excalibur.getY()]='E';
+        String text ="";
+        for ( int i = 0; i < MazeApp.lo.length; i++){
+            for (int j = 0; j < MazeApp.lo.length; j++){
+                text+= MazeApp.lo [i][j];
+                text+= " ";
+            }
+            text+= "\n";
+        }
+        jTextArea1.setText(text);
     }
     
-    lab.toString() {
+    
+    
+    
+    /*maze.toString() {
         
     }    
     
@@ -45,7 +67,7 @@ public class UI extends javax.swing.JFrame implements ActionListener, KeyListene
     
     }
     
-    lab.moveHero( enum dir ){
+    maze.moveHero( enum dir ){
             
         
     }*/
@@ -259,8 +281,10 @@ public class UI extends javax.swing.JFrame implements ActionListener, KeyListene
         jButton5.setEnabled(true);
         jButton6.setEnabled(true);
         jLabel4.setText("Podes jogar");
+        this.displayMaze();
     }                                        
 
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
 		String message = "Tens a certeza que queres terminar o jogo?";
