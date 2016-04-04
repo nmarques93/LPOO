@@ -3,6 +3,7 @@ package maze.logic;
 
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.Vector;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -11,17 +12,20 @@ public class Maze {
 	
 	protected char [][] layout=new char[10][10];
 	protected Hero luke=new Hero();
-	protected Dragon smaug=new Dragon();
+	protected Vector<Dragon> dragons;
 	protected Sword excalibur=new Sword();
 	protected int size; //apenas precisa de uma dimensao por ser um labirinto quadrado
+	protected int nDragons;
 	
 	protected boolean ended=false;
 	
 	/*
-	 * construtor que usa uma matriz fornecida pelo user
+	 * construtor que usa uma matriz fornecida pelo user; apenas permite a existencia de um dragao
 	 */
 	public Maze(char[][] lo){
 		this.layout=lo;
+		this.luke=new Hero();
+		this.excalibur=new Sword();
 		
 		//faz o scan do labirinto e atribui a posicao dos simbolos as classes respetivas
 		for (int i = 0; i < layout.length; i++) {
@@ -31,7 +35,7 @@ public class Maze {
 		    			luke.getPos().move(i, j);
 		    			break;
 		    		case 'D':
-		    			smaug.getPos().move(i, j);
+		    			dragons.get(0).getPos().move(i, j);
 		    			break;
 		    		case 'S':
 		    			excalibur.getPos().move(i, j);
@@ -49,13 +53,13 @@ public class Maze {
 	public Coord createExit(Random r){
 		Coord exit = new Coord();
 
-		// generating exit distance to corner
+		// cria uma saida ao pe de um canto
 		int exitZ;
 		do {
 			exitZ = r.nextInt(size - 2) + 1;
 		} while (exitZ % 2 == 0);
 
-		// getting random border to place exit at
+		// obtem uma borda aleatoria do labirinto
 		switch (r.nextInt(4)) {
 		// top
 		case 0:
@@ -92,7 +96,8 @@ public class Maze {
 	public Maze(int dimensao, int numDragoes, TipoDragao type){
 		
 		Maze myMaze=new Maze();
-		size=dimensao;
+		this.nDragons=numDragoes;
+		myMaze.size=dimensao;
 		char[][] lab=new char[size][size];
 		boolean[][] visitedCells=new boolean[(dimensao-1)/2][(dimensao-1)/2];
 		Stack<Coord> history=new Stack<Coord>();
@@ -127,7 +132,7 @@ public class Maze {
 			direction = Direction.values()[r.nextInt(4)];
 		} while (!validMove(visitedCells, guideCell, direction));
 
-		// updating maze
+		// atualiza o labirinto
 		switch (direction) {
 		case Up:
 			layout[guideCell.getY() * 2][guideCell.getX() * 2 + 1] = ' ';
@@ -143,14 +148,20 @@ public class Maze {
 			break;
 		}
 
-		moveGuideCell(direction);
+		moveGuideCell(guideCell, direction);
 		visitedCells[guideCell.getY()][guideCell.getX()] = true;
 		history.push(new Coord(guideCell.getX(), guideCell.getY()));
-
-	// creating labyrinth
-	return new Maze(width, height, maze);
+		myMaze.layout=layout;//define o layout do maze a retornar
+		/*
+		 * criar e atribuir posições aleatorias aos elementos do labirinto
+		 */
+		createDragons(numDragoes, type);
+		createHero();
+		createSword();
 		
 }
+	
+	
 	
 	protected boolean validMove(boolean[][] visitedCells, Coord guideCell, Direction direction){
 		switch (direction) {
@@ -176,6 +187,89 @@ public class Maze {
 
 		return !adjacentVisited(visitedCells, guideCell, direction);
 	}
+	
+	public void moveElements(Direction direction){
+		this.luke.move(this, excalibur, direction);
+		for(int i=0; i<this.nDragons; i++)
+			this.dragons.get(i).move(this, luke);
+		
+	}
+	
+	//apenas se pode escolher um tipo para todos os dragoes
+	protected void createDragons(int nDragons, TipoDragao type){
+		Random m=new Random();
+		Random n=new Random();
+		int x, y;
+		boolean set;
+		
+		for(int i=0; i<nDragons; i++){
+			set=false;
+			//ciclo que atribui posicoes aleatorias ate encontrar uma que seja um espaço
+			while(!set){
+				x=m.nextInt(size);
+				y=n.nextInt(size);
+				if(layout[x][y]==' '){
+					dragons.get(i).getPos().move(x, y);
+					//TODO: adicionar o atributo type a Dragon
+					set=true;
+				}
+			}
+		}
+	}
+	
+	//algoritmo semelhante ao usado na createDragons
+	protected void createHero(){
+		Random m=new Random();
+		Random n=new Random();
+		int x, y;
+		boolean set=false;
+		
+		//ciclo que atribui posicoes aleatorias ate encontrar uma que seja um espaço
+		while(!set){
+			x=m.nextInt(size);
+			y=n.nextInt(size);
+			if(layout[x][y]==' '){
+				luke.getPos().move(x, y);
+				set=true;
+			}
+		}
+	}
+	
+	protected void createSword(){
+		Random m=new Random();
+		Random n=new Random();
+		int x, y;
+		boolean set=false;
+		
+		//ciclo que atribui posicoes aleatorias ate encontrar uma que seja um espaço
+		while(!set){
+			x=m.nextInt(size);
+			y=n.nextInt(size);
+			if(layout[x][y]==' '){
+				excalibur.getPos().move(x, y);
+				set=true;
+			}
+		}
+	}
+	
+	
+	private void moveGuideCell(Coord guideCell, Direction direction) {
+		switch (direction) {
+		case Right:
+			guideCell.setX(guideCell.getX() + 1);
+			break;
+		case Down:
+			guideCell.setY(guideCell.getY() + 1);
+			break;
+		case Left:
+			guideCell.setX(guideCell.getX() - 1);
+			break;
+		case Up:
+			guideCell.setY(guideCell.getY() - 1);
+			break;
+		}
+	}
+	
 	
 	protected boolean adjacentVisited(boolean[][] visitedCells, Coord guideCell, Direction direction){
 		switch (direction) {
@@ -211,10 +305,11 @@ public class Maze {
 		return this.layout;
 	}
 	
-	public void printMaze(Hero luke, Dragon smaug, Sword excalibur){
+	public void printMaze(){
 		
 		this.layout[excalibur.getPos().getX()][excalibur.getPos().getY()]=excalibur.getSymbol();
-		this.layout[smaug.getPos().getX()][smaug.getPos().getY()]=smaug.getSymbol();
+		for(int i=0; i<nDragons; i++)
+			this.layout[dragons.get(i).getPos().getX()][dragons.get(i).getPos().getY()]=dragons.get(i).getSymbol();
 		this.layout[luke.getPos().getX()][luke.getPos().getY()]=luke.getSymbol();
 		
 		for (int i = 0; i < 10; i++) {

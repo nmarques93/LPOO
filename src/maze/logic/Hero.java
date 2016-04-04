@@ -38,20 +38,20 @@ public class Hero extends Element{
 		return super.validMove(maz, x, y);
 	}
 	
-	public void move(Maze maz, Sword excalibur, Dragon smaug, char direction){
-		if(direction =='d' && validMove(maz, getPos().getX()+1, getPos().getY())){
+	public void move(Maze maz, Sword excalibur, Direction direction){
+		if(direction ==Direction.Down && validMove(maz, getPos().getX()+1, getPos().getY())){
 			maz.setSymbol(getPos().getX(), getPos().getY(), ' ');
 			getPos().translate(1, 0);
 		}
-		if(direction =='u' && validMove(maz, getPos().getX()-1, getPos().getY())){
+		if(direction ==Direction.Up && validMove(maz, getPos().getX()-1, getPos().getY())){
 			maz.setSymbol(getPos().getX(), getPos().getY(), ' ');
 			getPos().translate(-1, 0);
 		}
-		if(direction =='r' && validMove(maz, getPos().getX(), getPos().getY()+1)){
+		if(direction ==Direction.Right && validMove(maz, getPos().getX(), getPos().getY()+1)){
 			maz.setSymbol(getPos().getX(), getPos().getY(), ' ');
 			getPos().translate(0, 1);
 		}
-		if(direction =='l' && validMove(maz, getPos().getX(), getPos().getY()-1)){
+		if(direction ==Direction.Left && validMove(maz, getPos().getX(), getPos().getY()-1)){
 			maz.setSymbol(getPos().getX(), getPos().getY(), ' ');
 			getPos().translate(0, -1);
 		}

@@ -5,6 +5,7 @@ import java.util.Random;
 public class Dragon extends Element{
 	protected boolean isDead;
 	protected boolean isAsleep;
+	TipoDragao type;
 	
 	public Dragon(){
 		symbol='D';
@@ -31,6 +32,7 @@ public class Dragon extends Element{
 		Random pos=new Random();
 		boolean hasMoved=false;
 		int r = pos.nextInt(4);
+		//apenas sai do ciclo qd o dragao se tiver mexido
 		while(!hasMoved){
 			r = pos.nextInt(4);
 			if(r == 0 && validMove(maz, getPos().getX()+1,getPos().getY())){
